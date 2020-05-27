@@ -42,7 +42,8 @@ def process(file_dir: str):
     gdv, gdr, hl, hpv = [], [], [], []      # feature set No.1, 2, 6, 7 in paper
     aui = []                                # feature set No. 5
 
-    features_in_need = [gdv, gdr, aui, hl, hpv]
+    features_in_need_1 = [gdv, gdr]         # feature set No.1 2
+    features_in_need_2 = [hl, hpv]          # feature set No.6 7
     for column in columns:
         if 'gaze_0' in column or 'gaze_1' in column:
             gdv.append(column)
@@ -54,22 +55,38 @@ def process(file_dir: str):
             hpv.append(column)
         elif 'AU' in column and 'r' in column:
             aui.append(column)
-    # gdv = ['gaze_0_x', 'gaze_0_y', 'gaze_0_z', 'gaze_0_x', 'gaze_1_y', 'gaze_1_z']
-    # features_in_need.append(gdv)
 
-    # gdr = ['gaze_angle_x', 'gaze_angle_y']
-    # features_in_need.append(gdr)
+    el = landmark(pd_data, 'eye')           # feat 3
+    fl = landmark(pd_data, 'facial')        # feat 8
 
-    # hl = ['pose_Tx', 'pose_Ty', 'pose_Tz']      # head location
-    # features_in_need.append(hl)
-
-    # hpv = ['pose_Rx', 'pose_Ry', 'pose_Rz']     # head pose vector
-    # features_in_need.append(hpv)
-    print(features_in_need)
-
-    for feature_set in features_in_need:
+    for feature_set in features_in_need_1:          # feat 1, 2
         compute_feature(pd_data, feature_set)
+
+    compute_feature(el, el.columns)                 # feat 3
+
+    for feature_set in features_in_need_2:          # feat 6, 7
+        compute_feature(pd_data, feature_set)
+
+    compute_feature(fl, fl.columns)                 # feat 8
+
+
+def landmark(df: pd.DataFrame, mark_kind):
+    df_features = None
+    if mark_kind == 'eye':
+        columns = ['eye_lmk_x', 'eye_lmk_y', 'eye_lmk_X', 'eye_lmk_Y', 'eye_lmk_Z']
+        df_features = pd.DataFrame(columns=columns)
+        for column in columns:
+            features = [column + '_' + i.__str__() for i in range(0, 56)]
+            df_features[column] = df[features].mean(axis=1)
+    if mark_kind == 'facial':
+        columns = ['x', 'y', 'X', 'Y', 'Z']
+        df_features = pd.DataFrame(columns=columns)
+        for column in columns:
+            features = [column + '_' + i.__str__() for i in range(0, 67)]
+            df_features[column] = df[features].mean(axis=1)
+    return df_features
 
 
 if __name__ == '__main__':
     process("example.csv")
+
