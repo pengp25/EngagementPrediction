@@ -64,6 +64,7 @@ def process(file_dir: str):
 
     compute_feature(el, el.columns)                 # feat 3
 
+    compute_feature(pd_data, aui)                   # feat 5
     for feature_set in features_in_need_2:          # feat 6, 7
         compute_feature(pd_data, feature_set)
 
