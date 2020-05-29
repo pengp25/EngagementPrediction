@@ -6,28 +6,6 @@ from math import floor
 first_row = True
 
 
-# return sigma, range, max
-# def compute_feature(df: pd.DataFrame, columns):
-#     std_feature = []
-#     range_feature = []
-#     max_feature = []
-#     for column in columns:
-#         vector = df[column].to_numpy()
-#         std_feature.append(vector.std())
-#         max_v = vector.max()
-#         max_feature.append(max_v)
-#         range_feature.append(max_v - vector.min())
-#
-#     # output
-#     f = open('processed_data.csv', 'a+', newline='', encoding='UTF8')
-#     csv_writer = csv.writer(f)
-#     csv_writer.writerow(columns)
-#     csv_writer.writerow(std_feature)
-#     csv_writer.writerow(range_feature)
-#     csv_writer.writerow(max_feature)
-#     print("output finish!")
-
-
 def process(data, columns):
     global first_row
     pd_data = pd.DataFrame(data, columns=columns)
@@ -77,13 +55,13 @@ def landmark(df: pd.DataFrame, mark_kind):
         df_features = pd.DataFrame(columns=columns)
         for column in columns:
             features = [column + '_' + i.__str__() for i in range(0, 56)]
-            df_features[column] = df[features].mean(axis=1)
+            df_features[column] = df[features].mean(axis=1)/100
     if mark_kind == 'facial':
         columns = ['x', 'y', 'X', 'Y', 'Z']
         df_features = pd.DataFrame(columns=columns)
         for column in columns:
             features = [column + '_' + i.__str__() for i in range(0, 67)]
-            df_features[column] = df[features].mean(axis=1)
+            df_features[column] = df[features].mean(axis=1)/100
     return df_features
 
 
@@ -99,7 +77,7 @@ def compute(file_dir: str):
     for i in range(1, len(csv_data)):
         data.append(list(map(float, csv_data[i])))
     if len(data) > 550:             # first 200 frames + last 200 frames + 150 frames for computing at least
-        windows = floor((len(data) - 200)/150)
+        windows = floor((len(data) - 400)/150)
         for i in range(0, 150):
             segment = data[i:i+windows]
             process(segment, columns)
