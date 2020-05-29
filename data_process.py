@@ -79,7 +79,7 @@ def compute(file_dir: str):
     if len(data) > 550:             # first 200 frames + last 200 frames + 150 frames for computing at least
         windows = floor((len(data) - 400)/150)
         for i in range(0, 150):
-            segment = data[i:i+windows]
+            segment = data[i + 200: i + 200 + windows]
             process(segment, columns)
             print("finished segment{}/150".format(i))
     else:
