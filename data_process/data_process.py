@@ -6,7 +6,7 @@ from math import floor
 first_row = True
 
 
-def process(data, columns):
+def process(data, columns, out_dir):
     global first_row
     pd_data = pd.DataFrame(data, columns=columns)
     pd_output = pd.DataFrame()
@@ -42,10 +42,10 @@ def process(data, columns):
     # print(pd_output)
     # print(pd_output.columns.size)
     if first_row:
-        pd_output.to_csv('output.csv', mode='a', encoding='UTF8', index=False)
+        pd_output.to_csv(out_dir, mode='a', encoding='UTF8', index=False)
         first_row = False
     else:
-        pd_output.to_csv('output.csv', mode='a', encoding='UTF8', index=False, header=False)
+        pd_output.to_csv(out_dir, mode='a', encoding='UTF8', index=False, header=False)
 
 
 def landmark(df: pd.DataFrame, mark_kind):
@@ -65,7 +65,7 @@ def landmark(df: pd.DataFrame, mark_kind):
     return df_features
 
 
-def compute(file_dir: str):
+def compute(file_dir: str, out_dir):
     csv_file = csv.reader(open(file_dir, 'r', encoding='UTF8'))
     csv_data = [row for row in csv_file]
 
@@ -80,12 +80,12 @@ def compute(file_dir: str):
         windows = floor((len(data) - 400)/150)
         for i in range(0, 150):
             segment = data[i + 200: i + 200 + windows]
-            process(segment, columns)
+            process(segment, columns, out_dir)
             print("finished segment{}/150".format(i))
     else:
         print("too short to compute")
 
 
 if __name__ == '__main__':
-    compute("example.csv")
+    compute(r"data_process\example.csv", out_dir=r'data_process\output.csv')
 
