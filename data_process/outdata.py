@@ -13,9 +13,10 @@ datafilename = "D:/Aopenface/DAiSEE/DAiSEE/DataSet/Test"                #数据�
 outputfilename = "D:/Aopenface/DAiSEE/DAiSEE/DataSet/output_Test"       #输出目录
 #win命令以反斜杠\为辨识符
 command = "D:\\OpenFace_2.2.0_win_x64\\FeatureExtraction.exe"           #exe文件地址
-
-                    ####以下代码地址无序更改####
-
+                   
+                    ####43行需要把21改为当前数据集的人物数量####
+                    ####    除此之外 以下代码地址无序更改  ####
+  
 #运行
 for root, dirs, files in os.walk(datafilename):
     if(len(dirs)!=0):
@@ -40,6 +41,7 @@ for root, dirs, files in os.walk(outputfilename):
 #删除 空文件夹
 for root, dirs, files in os.walk(outputfilename):
     if(len(dirs)!=0 and len(dirs)!=21):
+    #0代表空文件，21代表数据集人物数量
         for dir in dirs:
             targetdir = root.replace('\\','/') + "/" + dir
             os.rmdir(targetdir)
