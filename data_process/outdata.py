@@ -39,7 +39,7 @@ for root, dirs, files in os.walk(outputfilename):
             os.remove(targetfile)
 #删除 空文件夹
 for root, dirs, files in os.walk(outputfilename):
-    if(len(dirs)!=0 and len(dirs)!=1):
+    if(len(dirs)!=0 and len(dirs)!=21):
         for dir in dirs:
             targetdir = root.replace('\\','/') + "/" + dir
             os.rmdir(targetdir)
